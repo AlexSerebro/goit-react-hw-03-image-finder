@@ -1,25 +1,24 @@
-import logo from './logo.svg';
 import './App.css';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import PropTypes from 'prop-types';
+import { Component } from 'react';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+export default class App extends Component{
+  state = {
+  image: null,
 }
 
-export default App;
+  componentDidMount() {
+    fetch(`https://pixabay.com/api/?q=cat&page=1&key=25723466-237a46130ce218f798049a33b&image_type=photo&orientation=horizontal&per_page=12`).then(res=>res.json()).then(console.log)
+  }
+
+  render() {
+    return (
+      <div>
+        {this.state.image && <div>тут будет картинка</div>}
+        <ToastContainer autoClose={3000}/>
+      </div>
+    )
+  }
+};
