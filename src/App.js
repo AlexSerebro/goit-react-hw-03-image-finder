@@ -1,24 +1,88 @@
-import './App.css';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import PropTypes from 'prop-types';
+import Loader from './components/Loader';
 import { Component } from 'react';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-export default class App extends Component{
+import './App.css';
+// import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
+
+import fetchImages from './services/images-api';
+
+import Searchbar from './components/Searchbar';
+import ImageGallery from './components/ImageGallery';
+import Button from './components/Button';
+import Modal from './components/Modal';
+
+class App extends Component {
   state = {
-  image: null,
-}
+    images: [],
+    query: '',
+    page: 1,
+    modalImg: '',
+    isLoading: false,
+    showModal: false,
+  };
 
-  componentDidMount() {
-    fetch(`https://pixabay.com/api/?q=cat&page=1&key=25723466-237a46130ce218f798049a33b&image_type=photo&orientation=horizontal&per_page=12`).then(res=>res.json()).then(console.log)
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      prevState.query === this.state.query &&
+      prevState.page === this.state.page
+    ) {
+      return;
+    }
+    this.setState({ isLoading: true });
+
+    fetchImages(this.state)
+      .then(res => {
+        const images = [...this.state.images, ...res.hits];
+        this.setState({ images });
+        if (this.state.page !== 1) {
+          window.scrollTo({
+            top: document.documentElement.scrollHeight,
+            behavior: 'smooth',
+          });
+        }
+      })
+      .catch(res => {
+        console.log(res);
+      })
+      .finally(() => this.setState({ isLoading: false }));
   }
+
+  openModal = modalImg => {
+    this.setState({ showModal: true, modalImg });
+  };
+
+  closeModal = () => {
+    this.setState({ showModal: false });
+  };
+
+  onSearchSubmit = query => {
+    this.setState({ query, page: 1, images: [] });
+  };
+
+  onBtnClickHandler = () => {
+    const page = this.state.page + 1;
+    this.setState({ page });
+  };
 
   render() {
+    const { images, isLoading, showModal, modalImg } = this.state;
     return (
-      <div>
-        {this.state.image && <div>тут будет картинка</div>}
-        <ToastContainer autoClose={3000}/>
+      <div className="App">
+        <ToastContainer autoClose={2000} />
+        <Searchbar onSubmit={this.onSearchSubmit}></Searchbar>
+        <ImageGallery images={images} openModal={this.openModal} />
+        {isLoading && <Loader />}
+        {images.length !== 0 && isLoading !== true && (
+          <Button onMoreClick={this.onBtnClickHandler} />
+        )}
+        {showModal && (
+          <Modal closeModal={this.closeModal} modalImg={modalImg} />
+        )}
       </div>
-    )
+    );
   }
-};
+}
+
+export default App;
