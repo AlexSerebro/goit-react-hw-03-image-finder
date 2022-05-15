@@ -2,12 +2,8 @@ import Loader from './components/Loader';
 import { Component } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
 import './App.css';
-// import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
-
 import fetchImages from './services/images-api';
-
 import Searchbar from './components/Searchbar';
 import ImageGallery from './components/ImageGallery';
 import Button from './components/Button';

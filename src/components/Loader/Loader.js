@@ -1,9 +1,9 @@
-// import Loader from 'react-loader-spinner';
+import { TailSpin } from 'react-loader-spinner';
 
 function MarkUpLoader() {
   return (
     <div className="loader">
-      {/* <Loader type="Grid" color="#3f51b5" height={80} width={80} /> */}
+      <TailSpin height="40" width="40" color="#ffffff" ariaLabel="loading" />
     </div>
   );
 }
