@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { toast } from 'react-toastify';
 import { ImSearch } from 'react-icons/im'
+import { toast } from 'react-toastify';
 
 class Searchbar extends Component {
   state = {
@@ -17,7 +17,7 @@ class Searchbar extends Component {
 
     const query = this.state.query.trim();
     if (!query) {
-       toast.error('Plz, enter search query', {
+      toast.error('Plz, enter search query', {
         position: 'top-right',
         autoClose: 2000,
         });
